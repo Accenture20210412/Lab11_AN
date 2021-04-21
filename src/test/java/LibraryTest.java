@@ -8,6 +8,7 @@ import naming.LibraryFactory;
 import naming.LibraryManager;
 import naming.LibraryResources;
 import naming.Reader;
+import naming.ReturnOutcome;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
@@ -134,11 +135,68 @@ public class LibraryTest {
         assertEquals(BorrowOutcome.bookAlreadyBorrowedByReader, borrowOutcome);
     }
 
+    @Test
+    void shouldReturnBookWithSucces() {
 
+        Reader reader = new Reader("reader");
+        libraryManager.addNewReader(reader);
+        Book book = new Book(new ISBN("numer"), "autor", "tytuł");
+        libraryManager.addBook(book);
 
+        BorrowOutcome borrowOutcome = libraryManager.borrowBook(book, reader);
+        ReturnOutcome returnOutcome = libraryManager.returnBook(book, reader);
 
+        assertEquals(BorrowOutcome.success, borrowOutcome);
+        assertEquals(ReturnOutcome.SUCCESS, returnOutcome);
+    }
 
+    @Test
+    void shouldNotReturnBookIfUserIsNotRegistered() {
 
+        Reader reader = new Reader("reader");
+        // readera nie wpisujemy do naszej bilbioteki
 
+        Book book = new Book(new ISBN("numer"), "autor", "tytuł");
+        libraryManager.addBook(book);
+
+        BorrowOutcome borrowOutcome = libraryManager.borrowBook(book, reader);
+        ReturnOutcome returnOutcome = libraryManager.returnBook(book, reader);
+
+        assertEquals(BorrowOutcome.readerNotEnrolled, borrowOutcome);
+        assertEquals(ReturnOutcome.READER_NOT_ENROLLED, returnOutcome);
+    }
+
+    @Test
+    void shouldNotReturnBookThatWasNotBorrowed() {
+
+        Reader reader = new Reader("reader");
+        libraryManager.addNewReader(reader);
+
+        Book book = new Book(new ISBN("numer"), "autor", "tytuł");
+        libraryManager.addBook(book);
+
+        ReturnOutcome returnOutcome = libraryManager.returnBook(book, reader);
+
+        assertEquals(ReturnOutcome.BOOK_NOT_BORROWED_BY_READER, returnOutcome);
+    }
+
+    @Test
+    void shouldBorrowTwoBooksForOneUser() {
+
+        Reader reader = new Reader("reader");
+        libraryManager.addNewReader(reader);
+
+        Book book = new Book(new ISBN("numer"), "autor", "tytuł");
+        libraryManager.addBook(book);
+
+        Book book2 = new Book(new ISBN("numer2"), "autor2", "tytuł2");
+        libraryManager.addBook(book);
+
+        BorrowOutcome borrowOutcome = libraryManager.borrowBook(book, reader);
+        BorrowOutcome borrowOutcome2 = libraryManager.borrowBook(book2, reader);
+
+        assertEquals(BorrowOutcome.success, borrowOutcome);
+        assertEquals(BorrowOutcome.success, borrowOutcome2);
+    }
 
 }
