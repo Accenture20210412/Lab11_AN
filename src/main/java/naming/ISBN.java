@@ -9,7 +9,7 @@ public class ISBN {
 
     private final String raw;
 
-    private ISBN(String raw) {
+    public ISBN(String raw) {
         this.raw = raw;
     }
 

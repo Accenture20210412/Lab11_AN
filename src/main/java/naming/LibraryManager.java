@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 public class LibraryManager implements BookFacade, ReaderFacade {
+
     private final ReadersManagerInterface readersManager;
     private final BorrowManager borrowManager;
     private final LibraryResources libraryResources;
@@ -14,8 +15,6 @@ public class LibraryManager implements BookFacade, ReaderFacade {
         this.libraryResources = libraryResources;
     }
 
-    public LibraryManager() {
-    }
 
     @Override
     public void addBook(Book book) {

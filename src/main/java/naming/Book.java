@@ -8,9 +8,9 @@ import java.util.Objects;
 
 public class Book {
 
-    private final ISBN isbn;
-    private final String author;
-    private final String title;
+    private ISBN isbn;
+    private String author;
+    private String title;
 
     public Book(ISBN isbn, String author, String title) {
         this.isbn = isbn;

@@ -35,10 +35,12 @@ public class LibraryResources implements Resources {
     public void borrowBook(ISBN isbn) {
         bookWarehouse.borrowBook(isbn);
     }
+
     @Override
     public boolean contains(Book book) {
         return catalogue.contains(book);
     }
+
     @Override
     public void addToResources(ISBN isbn) {
         bookWarehouse.addBook(isbn);

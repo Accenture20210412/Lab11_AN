@@ -2,11 +2,12 @@ package naming;
 
 // TODO: clean up methods
 
-import static java.example.naming.BorrowOutcome.*;
-import static java.example.naming.BorrowOutcome.bookAlreadyBorrowedByReader;
-import static java.example.naming.BorrowOutcome.noAvailableCopies;
-import static java.example.naming.BorrowOutcome.notInCatalogue;
-import static java.example.naming.BorrowOutcome.readerNotEnrolled;
+
+import static naming.BorrowOutcome.bookAlreadyBorrowedByReader;
+import static naming.BorrowOutcome.noAvailableCopies;
+import static naming.BorrowOutcome.notInCatalogue;
+import static naming.BorrowOutcome.readerNotEnrolled;
+import static naming.BorrowOutcome.success;
 
 class BorrowManager {
     private final Resources libraryResources;
@@ -20,17 +21,25 @@ class BorrowManager {
     }
 
     BorrowOutcome borrowBook(Book book, Reader reader) {
-        if (isRegister(reader)) {
+        if (readersManager.contains(reader) &&
+                libraryResources.contains(book) &&
+                !borrowedBooksRegistry.readerHasBookCopy(book, reader) &&
+                libraryResources.availableCopies(book) > 0
+        ) {
+            libraryResources.borrowBook(book.getIsbn());
+            borrowedBooksRegistry.borrow(book, reader);
+            return success;
+        } else
+        if (!readersManager.contains(reader)) {
             return readerNotEnrolled;
-        } else if (isAvailableInCatalogue(book)) {
+        } else if (!libraryResources.contains(book)) {
             return notInCatalogue;
-        } else if (isAlreadyBorrowed(book, reader)) {
+        } else if (borrowedBooksRegistry.readerHasBookCopy(book, reader)) {
             return bookAlreadyBorrowedByReader;
-        } else if (copyIsAvailable(book)) {
+        } else if (libraryResources.availableCopies(book) == 0) {
             return noAvailableCopies;
-        } else {
-            return borrowBook(book, reader);
         }
+        return null;
     }
 
 
