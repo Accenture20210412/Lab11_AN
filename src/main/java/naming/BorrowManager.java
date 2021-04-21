@@ -44,17 +44,19 @@ class BorrowManager {
 
 
     ReturnOutcome returnBook(Book book, Reader reader) {
-        if (isRegister(reader)) {
+
+        if (!readersManager.contains(reader))
             return ReturnOutcome.READER_NOT_ENROLLED;
-        }else
-        if (!isAvailableInCatalogue(book)) {
+
+        if (!libraryResources.contains(book))
             return ReturnOutcome.NOT_IN_CATALOGUE;
-        }else
-        if (isAlreadyBorrowed(book, reader)) {
+
+        if (borrowedBooksRegistry.readerHasNoBookCopy(book, reader))
             return ReturnOutcome.BOOK_NOT_BORROWED_BY_READER;
-        }else {
-            return giveBack(book, reader);
-        }
+
+        libraryResources.addToResources(book.getIsbn());
+        borrowedBooksRegistry.returnBook(book, reader);
+        return ReturnOutcome.SUCCESS;
     }
 
     private ReturnOutcome borrow(Book book, Reader reader) {

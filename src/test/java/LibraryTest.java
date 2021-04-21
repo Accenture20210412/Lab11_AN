@@ -132,7 +132,7 @@ public class LibraryTest {
         BorrowOutcome borrowOutcome2 = libraryManager.borrowBook(book, reader);
 
         assertEquals(BorrowOutcome.success, borrowOutcome);
-        assertEquals(BorrowOutcome.bookAlreadyBorrowedByReader, borrowOutcome);
+        assertEquals(BorrowOutcome.bookAlreadyBorrowedByReader, borrowOutcome2);
     }
 
     @Test
@@ -190,7 +190,7 @@ public class LibraryTest {
         libraryManager.addBook(book);
 
         Book book2 = new Book(new ISBN("numer2"), "autor2", "tytuł2");
-        libraryManager.addBook(book);
+        libraryManager.addBook(book2);
 
         BorrowOutcome borrowOutcome = libraryManager.borrowBook(book, reader);
         BorrowOutcome borrowOutcome2 = libraryManager.borrowBook(book2, reader);
